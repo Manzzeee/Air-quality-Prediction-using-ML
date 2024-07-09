@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Air Quality Index Predictor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Ubuntu&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    <style>
+      table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 10px;
+        text-align: center;
+      }
+      th{
+        color: white
+      }
+      .td{
+        color: white;
+        font-weight: bold;
+      }
+      .center{
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .container-fluid{
+        padding-left: 0;
+        padding-right: 0
+      }
+      .table{
+        width: 50%
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <section id="title">
+    <div class="container-fluid">
+      <section id="title">
+      <div class="container-fluid" style="background-color:#695dbd; padding: 50px">
+        <center>
+        <h1 style="font-family: 'Montserrat', sans-serif;
+        font-size: 2.5rem;
+        line-height: 1.5;
+        font-weight: 700; color: white">Air Quality Index Prediction</h1></center>
+      </div>
+    </section>
+    </div>
+  </section>
+
+  <div class="results">
+<br><br>
+	<center><h2 style="color:blue;">Air Quality Index Output</h2></center>
+  <br><br>
+	 <table class="center table table-striped table-bordered table-hover">
+         <tbody>
+           <thead class = "thead-dark">
+              <th class="bg-dark" scope="col" data-toggle="tooltip" data-placement="top" title="Date">Date</th>
+              <th class="bg-dark" scope="col" data-toggle="tooltip" data-placement="top" title="PM 2.5">Air Quailty Index (PM 2.5)</th>
+            </thead>
+          {% set year = now.year %}
+          {% set month = now.month %}
+          {% set day = now.day %}
+          {% set final = [day, month, year]|join('/') %}
+             {% for item in prediction %}
+                 {% if loop.index <= 10 %}
+                {% if item <= 25 %}
+                {% set d = day + loop.index %}
+                 <tr>
+                   <td style="text-align:center">Date</td>
+                   <td class="td" style="text-align:center; background-color:#4bd433" data-toggle="tooltip" data-placement="top" title="Safe">{{ "%.3f"|format(item) }}</td>
+                 </tr>
+                 {% elif item>25 and item<=50 %}
+                 <tr>
+                   <td style="text-align:center">Date</td>
+                   <td class="td" style="text-align:center; background-color:#ebc12a" data-toggle="tooltip" data-placement="top" title="Normal">{{ "%.3f"|format(item) }}</td>
+                 </tr>
+                 {% elif item>50 and item<=100 %}
+                 <tr>
+                   <td style="text-align:center">Date</td>
+                   <td class="td" style="text-align:center; background-color:orange" data-toggle="tooltip" data-placement="top" title="Bit high">{{ "%.3f"|format(item) }}</td>
+                 </tr>
+                 {% elif item>100 and item<=300 %}
+                 <tr>
+                   <td style="text-align:center">{{ (now.day+loop.index)|string + "/" +month|string +"/"+ year|string }}</td>
+                   <td class="td bg-danger" style="text-align:center; " data-toggle="tooltip" data-placement="top" title="High">{{ "%.3f"|format(item) }}</td>
+                 </tr>
+                 {% else %}
+                 <tr>
+                   <td style="text-align:center">Date</td>
+                   <td style="text-align:center; background-color:red" data-toggle="tooltip" data-placement="top" title="Unsafe">{{ "%.3f"|format(item) }}</td>
+                 </tr>
+                 {% endif %}
+                 {% endif %}
+             {% endfor %}
+         </tbody>
+     </table>
+
+	</div>
+
+</body>
+</html>
